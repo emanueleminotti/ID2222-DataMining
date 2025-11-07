@@ -25,12 +25,8 @@ class LSH:
         self.num_hashes = num_hashes
         self.rows_per_band = num_hashes // num_bands
         
-        # This is our LSH index.
-        # It's a list of dictionaries. One dictionary for each band.
-        # Format: self.hash_tables[band_index][bucket_hash] = [doc_id_1, doc_id_2, ...]
         self.hash_tables: List[Dict[int, List[Any]]] = [dict() for _ in range(self.num_bands)]
         
-        print(f"LSH Index Initialized:")
         print(f"  Total Hashes (n): {self.num_hashes}")
         print(f"  Bands (b): {self.num_bands}")
         print(f"  Rows per Band (r): {self.rows_per_band}")
@@ -42,7 +38,7 @@ class LSH:
         The document is hashed into 'b' different buckets, one for each band.
 
         Args:
-            doc_id (Any): A unique identifier for the document (e.g., its name or index).
+            doc_id (Any): A unique identifier for the document.
             signature (List[int]): The MinHash signature (must be length 'n').
         
         Raises:
@@ -75,8 +71,7 @@ class LSH:
         """
         Finds all candidate pairs after all signatures have been added.
 
-        A pair is a candidate if it appears in the same bucket in
-        at least one band.
+        A pair is a candidate if it appears in the same bucket in at least one band.
 
         Returns:
             Set[Tuple[Any, Any]]: A set of unique candidate pairs.
@@ -90,7 +85,6 @@ class LSH:
             for bucket in table.values():
                 # If a bucket has 2 or more docs, they are candidates
                 if len(bucket) > 1:
-                    # Use combinations to get all unique pairs from the bucket
                     for pair in combinations(bucket, 2):
                         # Sort the pair so (doc_A, doc_B) is the same as (doc_B, doc_A)
                         sorted_pair = tuple(sorted(pair))
