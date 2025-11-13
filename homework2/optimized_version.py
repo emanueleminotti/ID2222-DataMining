@@ -137,7 +137,7 @@ def apriori(transactions, min_support, max_k=None):
 # =====================
 def generate_association_rules(freq_itemsets, n_transactions, min_support, min_confidence):
     support = {tuple(sorted(k)): v for k, v in
-               [(itemset, sup) for d in freq_itemsets.values() for itemset, sup in d.items()]}
+            [(itemset, sup) for d in freq_itemsets.values() for itemset, sup in d.items()]}
     rules = []
     for k, d in freq_itemsets.items():
         if k < 2:
@@ -178,7 +178,7 @@ def save_rules_to_csv(rules, path):
     with open(path, "w", newline="") as csvfile:
         writer = csv.writer(csvfile)
         writer.writerow(["antecedent", "consequent", "support_count", "support_frac",
-                         "confidence", "lift", "support_antecedent", "support_consequent"])
+                        "confidence", "lift", "support_antecedent", "support_consequent"])
         for r in rules:
             writer.writerow([
                 " ".join(map(str, r["antecedent"])),
@@ -220,7 +220,7 @@ if __name__ == "__main__":
 
     # Generate association rules
     rules = generate_association_rules(freq_itemsets, n_transactions,
-                                       min_support_rules, min_confidence)
+                                    min_support_rules, min_confidence)
     print(f"Generated {len(rules)} rules (min_support={min_support_rules}, min_confidence={min_confidence})")
 
     to_show = min(len(rules), top_n_rules_to_print)
@@ -231,7 +231,7 @@ if __name__ == "__main__":
             con = " ".join(map(str, r["consequent"]))
             lift_str = f"{r['lift']:.3f}" if r['lift'] is not None else "N/A"
             print(f"{i:2d}. {ant} -> {con}    sup={r['support_count']} ({r['support_frac']:.4f})  "
-                  f"conf={r['confidence']:.3f}  lift={lift_str}")
+                f"conf={r['confidence']:.3f}  lift={lift_str}")
 
     # Save rules CSV
     save_rules_to_csv(rules, OUTPUT_CSV_RULES)
