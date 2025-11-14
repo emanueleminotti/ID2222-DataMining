@@ -24,6 +24,19 @@ top_n_rules_to_print = 30  # top rules to show
 # HELPER FUNCTIONS
 # =====================
 def load_transactions(path):
+    """
+       Load and parse transaction data from file.
+
+       Args:
+           path (str): Path to the data file
+
+       Returns:
+           list: List of transactions, each as sorted list of integers
+
+       Raises:
+           FileNotFoundError: If the specified path doesn't exist
+       """
+
     transactions = []
     if not os.path.exists(path):
         raise FileNotFoundError(f"{path} not found.")
@@ -54,6 +67,16 @@ def load_transactions(path):
 
 
 def get_frequent_1_itemsets(transactions, min_support):
+    """
+        Find all frequent 1-itemsets from transactions.
+
+        Args:
+            transactions (list): List of transactions
+            min_support (int): Minimum support count threshold
+
+        Returns:
+            dict: Dictionary of frequent 1-itemsets with their support counts
+        """
     counts = defaultdict(int)
     for t in transactions:
         for item in t:
@@ -63,6 +86,16 @@ def get_frequent_1_itemsets(transactions, min_support):
 
 
 def apriori_gen(Lk_minus_1, k):
+    """
+        Generate candidate itemsets of size k from frequent itemsets of size k-1.
+
+        Args:
+            Lk_minus_1 (dict): Frequent itemsets of size k-1
+            k (int): Target itemset size
+
+        Returns:
+            set: Candidate itemsets of size k
+        """
     prev_itemsets = sorted(Lk_minus_1.keys())
     candidates = set()
     len_prev = len(prev_itemsets)
@@ -81,6 +114,16 @@ def apriori_gen(Lk_minus_1, k):
 
 
 def count_supports_fast(candidates, transactions):
+    """
+        Count support for candidate itemsets using efficient combination generation.
+
+        Args:
+            candidates (set): Candidate itemsets to count
+            transactions (list): List of transactions
+
+        Returns:
+            dict: Support counts for each candidate itemset
+        """
     k = len(next(iter(candidates))) if candidates else 0
     candidate_sets = set(map(frozenset, candidates))
     counts = defaultdict(int)
@@ -94,11 +137,30 @@ def count_supports_fast(candidates, transactions):
 
 
 def parallel_count_supports(args):
+    """
+        Wrapper function for parallel support counting.
+
+        Args:
+            args (tuple): Tuple of (candidates_chunk, transactions)
+
+        Returns:
+            dict: Partial support counts for the chunk
+        """
     candidates_chunk, transactions = args
     return count_supports_fast(candidates_chunk, transactions)
 
 
 def count_supports_parallel(candidates, transactions):
+    """
+        Distribute support counting across multiple CPU cores.
+
+        Args:
+            candidates (set): All candidate itemsets
+            transactions (list): List of transactions
+
+        Returns:
+            dict: Combined support counts from all processes
+        """
     n_cpus = min(cpu_count(), 8)
     chunk_size = len(candidates) // n_cpus or 1
     chunks = [list(candidates)[i:i + chunk_size] for i in range(0, len(candidates), chunk_size)]
@@ -112,6 +174,18 @@ def count_supports_parallel(candidates, transactions):
 
 
 def apriori(transactions, min_support, max_k=None):
+    """
+      Main Apriori algorithm to find all frequent itemsets.
+
+      Args:
+          transactions (list): List of transactions
+          min_support (int): Minimum support count threshold
+          max_k (int, optional): Maximum itemset size to mine
+
+      Returns:
+          dict: Dictionary containing frequent itemsets for each size k
+      """
+
     frequent_itemsets = dict()
     L1 = get_frequent_1_itemsets(transactions, min_support)
     k = 1
@@ -136,6 +210,19 @@ def apriori(transactions, min_support, max_k=None):
 # GENERATE ASSOCIATION RULES
 # =====================
 def generate_association_rules(freq_itemsets, n_transactions, min_support, min_confidence):
+    """
+       Generate association rules from frequent itemsets.
+
+       Args:
+           freq_itemsets (dict): Frequent itemsets found by Apriori
+           n_transactions (int): Total number of transactions
+           min_support (int): Minimum support count for rules
+           min_confidence (float): Minimum confidence threshold
+
+       Returns:
+           list: List of association rules sorted by confidence and support
+       """
+
     support = {tuple(sorted(k)): v for k, v in
             [(itemset, sup) for d in freq_itemsets.values() for itemset, sup in d.items()]}
     rules = []
@@ -175,6 +262,14 @@ def generate_association_rules(freq_itemsets, n_transactions, min_support, min_c
 
 
 def save_rules_to_csv(rules, path):
+    """
+       Save association rules to CSV file.
+
+       Args:
+           rules (list): List of association rules to save
+           path (str): Output file path
+       """
+
     with open(path, "w", newline="") as csvfile:
         writer = csv.writer(csvfile)
         writer.writerow(["antecedent", "consequent", "support_count", "support_frac",
