@@ -9,7 +9,7 @@ from multiprocessing import Pool, cpu_count
 # =====================
 # PARAMETERS
 # =====================
-DATA_PATH = "data/T10I4D100K.dat"
+DATA_PATH = "../data/T10I4D100K.dat"
 OUTPUT_CSV_ITEMSETS = "frequent_itemsets.csv"
 OUTPUT_CSV_RULES = "association_rules.csv"
 
