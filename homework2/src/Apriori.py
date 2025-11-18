@@ -25,17 +25,17 @@ top_n_rules_to_print = 30  # top rules to show
 # =====================
 def load_transactions(path):
     """
-       Load and parse transaction data from file.
+    Load and parse transaction data from file.
 
-       Args:
-           path (str): Path to the data file
+    Args:
+        path (str): Path to the data file
 
-       Returns:
-           list: List of transactions, each as sorted list of integers
+    Returns:
+        list: List of transactions, each as sorted list of integers
 
-       Raises:
-           FileNotFoundError: If the specified path doesn't exist
-       """
+    Raises:
+        FileNotFoundError: If the specified path doesn't exist
+    """
 
     transactions = []
     if not os.path.exists(path):
@@ -175,16 +175,16 @@ def count_supports_parallel(candidates, transactions):
 
 def apriori(transactions, min_support, max_k=None):
     """
-      Main Apriori algorithm to find all frequent itemsets.
+    Main Apriori algorithm to find all frequent itemsets.
 
-      Args:
-          transactions (list): List of transactions
-          min_support (int): Minimum support count threshold
-          max_k (int, optional): Maximum itemset size to mine
+    Args:
+        transactions (list): List of transactions
+        min_support (int): Minimum support count threshold
+        max_k (int, optional): Maximum itemset size to mine
 
-      Returns:
-          dict: Dictionary containing frequent itemsets for each size k
-      """
+    Returns:
+        dict: Dictionary containing frequent itemsets for each size k
+    """
 
     frequent_itemsets = dict()
     L1 = get_frequent_1_itemsets(transactions, min_support)
@@ -211,17 +211,17 @@ def apriori(transactions, min_support, max_k=None):
 # =====================
 def generate_association_rules(freq_itemsets, n_transactions, min_support, min_confidence):
     """
-       Generate association rules from frequent itemsets.
+    Generate association rules from frequent itemsets.
 
-       Args:
-           freq_itemsets (dict): Frequent itemsets found by Apriori
-           n_transactions (int): Total number of transactions
-           min_support (int): Minimum support count for rules
-           min_confidence (float): Minimum confidence threshold
+    Args:
+        freq_itemsets (dict): Frequent itemsets found by Apriori
+        n_transactions (int): Total number of transactions
+        min_support (int): Minimum support count for rules
+        min_confidence (float): Minimum confidence threshold
 
-       Returns:
-           list: List of association rules sorted by confidence and support
-       """
+    Returns:
+        list: List of association rules sorted by confidence and support
+    """
 
     support = {tuple(sorted(k)): v for k, v in
             [(itemset, sup) for d in freq_itemsets.values() for itemset, sup in d.items()]}
@@ -263,12 +263,12 @@ def generate_association_rules(freq_itemsets, n_transactions, min_support, min_c
 
 def save_rules_to_csv(rules, path):
     """
-       Save association rules to CSV file.
+    Save association rules to CSV file.
 
-       Args:
-           rules (list): List of association rules to save
-           path (str): Output file path
-       """
+    Args:
+        rules (list): List of association rules to save
+        path (str): Output file path
+    """
 
     with open(path, "w", newline="") as csvfile:
         writer = csv.writer(csvfile)
