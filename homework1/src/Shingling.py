@@ -2,31 +2,25 @@ import zlib
 from typing import List
 
 class Shingling:
-    """
-    Constructs k-shingles from a document, hashes them, and returns an ordered set of unique hash values.
-    """
+    
+    #Constructs k-shingles from a document, hashes them, and returns an ordered set of unique hash values.
+    
 
     def __init__(self, k: int):
-        """
-        Initializes the shingler with a shingle length k.
+        
+        #Initializes the shingler with a shingle length k.
 
-        Args:
-            k (int): The length of the k-shingles.
-        """
+        #Args:
+            #k (int): The length of the k-shingles.
+        
         if not isinstance(k, int) or k <= 0:
             raise ValueError("k must be a positive integer")
         self.k = k
 
+
     def get_hashed_shingles(self, doc_text: str) -> List[int]:
-        """
-        Processes a document into a sorted list of its unique hashed k-shingles.
+        
 
-        Args:
-            doc_text (str): The input document text.
-
-        Returns:
-            List[int]: A sorted list of unique 32-bit hashed shingle values.
-        """
         if not isinstance(doc_text, str):
             raise TypeError("Input document must be a string.")
 

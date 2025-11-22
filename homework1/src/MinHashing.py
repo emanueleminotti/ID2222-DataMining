@@ -49,7 +49,7 @@ class MinHashing:
         # Initialize the signature vector with infinity
         signature: List[float] = [float('inf')] * self.num_hashes
 
-        # We only need to iterate over the unique shingles
+        # We only need to iterate over the unique shingles (convert in set to remove duplicates)
         shingles_set: Set[int] = set(hashed_shingles)
 
         if not shingles_set:
@@ -57,8 +57,8 @@ class MinHashing:
             return [0] * self.num_hashes 
 
         # For each unique shingle apply 'num_hashes' hash functions
-        for shingle_hash in shingles_set:
-            for i in range(self.num_hashes):
+        for shingle_hash in shingles_set: # for all unique shingle
+            for i in range(self.num_hashes): # for all hash function
                 a, b = self.hash_coeffs[i]
                 
                 # Compute the hash: h(x) = (a*x + b) % p

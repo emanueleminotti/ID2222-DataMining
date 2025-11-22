@@ -25,7 +25,8 @@ class LSH:
         self.num_hashes = num_hashes
         self.rows_per_band = num_hashes // num_bands
         
-        self.hash_tables: List[Dict[int, List[Any]]] = [dict() for _ in range(self.num_bands)]
+        self.hash_tables: List[Dict[int, List[Any]]] = [dict() for _ in range(self.num_bands)] #create hash tables, a list of empty dictionaries
+                                                                                               #every dictionary represent a hash table for the band
         
         print(f"  Total Hashes (n): {self.num_hashes}")
         print(f"  Bands (b): {self.num_bands}")
@@ -48,7 +49,7 @@ class LSH:
             raise ValueError(f"Signature length {len(signature)} does not match "
                             f"expected num_hashes {self.num_hashes}")
         
-        for b in range(self.num_bands):
+        for b in range(self.num_bands): #loop towards all bands
             # 1. Get the slice of the signature for the current band
             start_row = b * self.rows_per_band
             end_row = start_row + self.rows_per_band
@@ -61,10 +62,10 @@ class LSH:
             # 3. Add the doc_id to the appropriate bucket in the correct band's table
             hash_table = self.hash_tables[b]
             
-            if bucket_hash not in hash_table:
+            if bucket_hash not in hash_table: #if a bucket doesn't exist add it with this document
                 hash_table[bucket_hash] = [doc_id]
             else:
-                if doc_id not in hash_table[bucket_hash]:
+                if doc_id not in hash_table[bucket_hash]: #if it already exists add the document (if not already present)
                     hash_table[bucket_hash].append(doc_id)
 
     def get_candidate_pairs(self) -> Set[Tuple[Any, Any]]:
