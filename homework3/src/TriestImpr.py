@@ -1,6 +1,6 @@
 import random
 from collections import defaultdict
-from ReservoirSampling import ReservoirSampling
+from src.ReservoirSampling import ReservoirSampling
 
 class TriestImpr:
     def __init__(self, M):
