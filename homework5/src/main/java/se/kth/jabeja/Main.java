@@ -1,5 +1,6 @@
 package se.kth.jabeja;
 
+
 import org.apache.log4j.Logger;
 import se.kth.jabeja.io.CLI;
 import se.kth.jabeja.io.GraphReader;
@@ -9,6 +10,8 @@ import se.kth.jabeja.rand.RandNoGenerator;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.HashMap;
+
+
 
 
 public class Main {
@@ -36,8 +39,11 @@ public class Main {
         //read the input graph
         HashMap<Integer, Node> graph = readGraph();
 
-        //start JaBeJa
-        startJabeja(graph);
+        // start JaBeJa
+        //startJabeja(graph);
+
+        // or start SA version
+        startSAJabeja(graph);
     }
 
     /**
@@ -61,4 +67,10 @@ public class Main {
         Jabeja host = new Jabeja(graph, config);
         host.startJabeja();
     }
+
+    private void startSAJabeja(HashMap<Integer, Node> graph) throws IOException {
+        SA_Jabeja host = new SA_Jabeja(graph, config);
+        host.startSAJabeja();
+    }
+
 }
