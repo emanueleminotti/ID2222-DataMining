@@ -39,11 +39,7 @@ public class Main {
         //read the input graph
         HashMap<Integer, Node> graph = readGraph();
 
-        // start JaBeJa
-        //startJabeja(graph);
-
-        // or start SA version
-        startSAJabeja(graph);
+        startJabeja(graph);
     }
 
     /**
@@ -64,13 +60,8 @@ public class Main {
      * @return
      */
     private void startJabeja(HashMap<Integer, Node> graph) throws IOException {
-        Jabeja host = new Jabeja(graph, config);
+        // Jabeja host = new Jabeja(graph, config);
+        Jabeja host = new SA_Jabeja(graph, config);
         host.startJabeja();
     }
-
-    private void startSAJabeja(HashMap<Integer, Node> graph) throws IOException {
-        SA_Jabeja host = new SA_Jabeja(graph, config);
-        host.startSAJabeja();
-    }
-
 }
