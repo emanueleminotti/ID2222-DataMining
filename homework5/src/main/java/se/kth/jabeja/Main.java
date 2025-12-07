@@ -11,9 +11,6 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.HashMap;
 
-
-
-
 public class Main {
     final static Logger logger = Logger.getLogger(Main.class);
 
