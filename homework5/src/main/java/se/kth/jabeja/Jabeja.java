@@ -33,16 +33,63 @@ public class Jabeja {
 
     //-------------------------------------------------------------------
     public void startJabeja() throws IOException {
+        // 1. Timer Start
+        long startTime = System.currentTimeMillis();
+        
+        int minEdgeCut = Integer.MAX_VALUE;
+        int convergenceRound = 0;
+        int totalSwaps = 0; // Se numberOfSwaps viene resettato, usane uno cumulativo
+
         for (round = 0; round < config.getRounds(); round++) {
-        for (int id : entireGraph.keySet()) {
-            sampleAndSwap(id);
+            for (int id : entireGraph.keySet()) {
+                sampleAndSwap(id);
+            }
+
+            //one cycle for all nodes have completed.
+            //reduce the temperature
+            saCoolDown();
+            
+            // --- LOGICA DI REPORTING AGGIUNTA ---
+            // Calcoliamo l'edge cut corrente (copiato dalla funzione report)
+            int grayLinks = 0;
+            for (int i : entireGraph.keySet()) {
+                Node node = entireGraph.get(i);
+                int nodeColor = node.getColor();
+                if (node.getNeighbours() != null) {
+                    for (int n : node.getNeighbours()) {
+                        Node p = entireGraph.get(n);
+                        if (nodeColor != p.getColor()) grayLinks++;
+                    }
+                }
+            }
+            int currentEdgeCut = grayLinks / 2;
+
+            // Aggiorna il minimo e il round di convergenza
+            if (currentEdgeCut < minEdgeCut) {
+                minEdgeCut = currentEdgeCut;
+                convergenceRound = round;
+            }
+            // ------------------------------------
+
+            report();
         }
 
-        //one cycle for all nodes have completed.
-        //reduce the temperature
-        saCoolDown();
-        report();
-        }
+        // 2. Timer End
+        long endTime = System.currentTimeMillis();
+        long duration = endTime - startTime;
+
+        // 3. STAMPA FINALE DELLE METRICHE PER IL REPORT
+        System.out.println("\n##################################################");
+        System.out.println("FINAL METRICS FOR REPORT");
+        System.out.println("##################################################");
+        System.out.println("Graph: " + config.getGraphFilePath());
+        System.out.println("Policy: " + config.getNodeSelectionPolicy());
+        System.out.println("Min Edge Cut: " + minEdgeCut);
+        System.out.println("Convergence Round (Best Solution found): " + convergenceRound);
+        System.out.println("Total Swaps: " + numberOfSwaps);
+        System.out.println("Execution Time (ms): " + duration);
+        System.out.println("Execution Time (sec): " + (duration / 1000.0));
+        System.out.println("##################################################\n");
     }
 
     /**
