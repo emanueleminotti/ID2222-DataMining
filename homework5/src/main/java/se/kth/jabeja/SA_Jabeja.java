@@ -16,11 +16,13 @@ public class SA_Jabeja extends Jabeja {
      */
     @Override
     protected void saCoolDown() {
-        // Geometric cooling: T = T * (1 - delta)
-        T = T * (1 - config.getDelta());
+        int restartRound = 400;
+        if (T > 0.001f)
+            T *= config.getDelta(); // Exponential cooling
+        else
+            T = 0.001f; // Restart mechanism
 
-        // Restart mechanism: if T drops below 0.01, reset to initial temperature
-        if (T < 0.01f) {
+        if (round > 0 && round % restartRound == 0) {
             T = config.getTemperature();
         }
     }

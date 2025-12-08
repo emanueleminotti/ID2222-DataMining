@@ -16,7 +16,7 @@ public class Jabeja {
     protected final HashMap<Integer/*id*/, Node/*neighbors*/> entireGraph;
     private final List<Integer> nodeIds;
     private int numberOfSwaps;
-    private int round;
+    protected int round;
     protected float T;
     private boolean resultFileCreated = false;
 
@@ -51,14 +51,14 @@ public class Jabeja {
      */
     protected void saCoolDown(){
         if (T > 1)
-        T -= config.getDelta();
+            T -= config.getDelta();
         if (T < 1)
-        T = 1;
+            T = 1;
     }
 
     /**
      * Sample and swap algorithm at node p
-     * Implements Algorithm 1 and the Hybrid policy [cite: 259, 203-205]
+     * Implements Algorithm 1 and the Hybrid policy
      * @param nodeId
      */
     private void sampleAndSwap(int nodeId) {
@@ -67,13 +67,13 @@ public class Jabeja {
 
         if (config.getNodeSelectionPolicy() == NodeSelectionPolicy.HYBRID
                 || config.getNodeSelectionPolicy() == NodeSelectionPolicy.LOCAL) {
-        // Local Policy: Try to find a partner among immediate neighbors [cite: 198]
+        // Local Policy: Try to find a partner among immediate neighbors
         partner = findPartner(nodeId, getNeighbors(nodep));
         }
 
         if (config.getNodeSelectionPolicy() == NodeSelectionPolicy.HYBRID
                 || config.getNodeSelectionPolicy() == NodeSelectionPolicy.RANDOM) {
-        // Hybrid/Random Policy: If local failed (partner is null), try random sample [cite: 204]
+        // Hybrid/Random Policy: If local failed (partner is null), try random sample
         if (partner == null) {
             partner = findPartner(nodeId, getSample(nodeId));
         }
